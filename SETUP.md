@@ -1,10 +1,10 @@
 # Assessoria Recupere — Guia de configuração
 
 Este site é um site estático simples (HTML/CSS/JS puro), sem build, para ficar
-fácil de manter e hospedar na Vercel. Só existem 3 coisas manuais a fazer para
-ele ficar 100% funcional e ligado à planilha de leads: (1) preencher os dados
-reais da empresa, (2) criar a planilha de leads, (3) publicar e apontar o
-domínio.
+fácil de manter e hospedar no **GitHub Pages**. Só existem 3 coisas manuais a
+fazer para ele ficar 100% funcional e ligado à planilha de leads: (1)
+preencher os dados reais da empresa, (2) criar a planilha de leads, (3)
+ativar o GitHub Pages e apontar o domínio.
 
 ## 1. Preencher os dados reais da empresa
 
@@ -34,8 +34,8 @@ Enquanto a Recupere não tiver conta própria de Google Ads, deixe
 site funciona normalmente. Quando tiver uma conta:
 1. Em Google Ads → Ferramentas → Conversões, crie uma conversão e copie o ID
    (formato `AW-XXXXXXXXX/XXXXXXXXXXXXXXXXXXXX`).
-2. Em `suspensa-principal.html`, `cassada-principal.html` e
-   `bafometro-principal.html`, descomente o bloco
+2. Em `suspensa-principal/index.html`, `cassada-principal/index.html` e
+   `bafometro-principal/index.html`, descomente o bloco
    `<!-- Google Ads Pixel ... -->` no `<head>` e troque `AW-XXXXXXXXX` pelo
    ID real.
 3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
@@ -101,27 +101,57 @@ assessorias do grupo, pronta para ser conectada depois ao sistema de gestão
 de clientes.
 
 **Se no futuro trocar o texto do formulário** (adicionar/remover um campo),
-lembre de atualizar tanto o `name="..."` do campo (em `index.html`,
-`suspensa-principal.html` ou `bafometro-principal.html`) quanto a linha
+lembre de atualizar tanto o `name="..."` do campo (em `index.html` ou no
+`index.html` dentro de uma das pastas de landing page) quanto a linha
 `sheet.appendRow([...])` no Apps Script, na mesma ordem.
 
-## 3. Publicar o site e apontar o domínio
+## 3. Ativar o GitHub Pages e apontar o domínio
 
-O site já está pronto para ir para o GitHub (`luiz01511/assessoriarecupere`)
-e ser publicado na Vercel. Depois de o projeto estar no ar na Vercel:
+O repositório já está no GitHub (`luiz01511/assessoriarecupere`), com um
+arquivo `CNAME` na raiz apontando para `assessoriarecupere.com.br` e cada
+landing page numa pasta própria com `index.html` dentro (`/suspensa-principal`,
+`/cassada-principal`, `/bafometro-principal`), pra gerar URLs sem `.html` —
+isso já é compatível com o GitHub Pages, só falta ligar duas coisas:
 
-1. No painel da Vercel do projeto → **Settings → Domains**, adicione
-   `assessoriarecupere.com.br` e `www.assessoriarecupere.com.br`.
-2. A Vercel vai mostrar os registros de DNS que faltam. Normalmente é:
-   - Um registro **A** no domínio raiz apontando para `76.76.21.21`, ou
-   - Um registro **CNAME** em `www` apontando para `cname.vercel-dns.com.`
-3. No **Registro.br**, entre em **Painel → seu domínio → DNS** e cadastre
-   exatamente os registros que a Vercel indicou (o valor exato pode mudar por
-   projeto — sempre use o que aparecer na tela da Vercel, não o exemplo
-   acima).
-4. Aguarde a propagação (pode levar de alguns minutos a algumas horas). A
-   Vercel emite o certificado SSL automaticamente assim que o DNS propaga.
+### 3.1 Ativar o GitHub Pages
+
+1. No repositório, vá em **Settings → Pages**.
+2. Em **Build and deployment → Source**, selecione **Deploy from a branch**.
+3. Em **Branch**, selecione `main` e a pasta `/ (root)`, depois **Save**.
+4. Ainda nessa tela, em **Custom domain**, digite `assessoriarecupere.com.br`
+   e clique em **Save** (o GitHub vai usar o `CNAME` que já está no repo, ou
+   recriar ele se pedir).
+5. Aguarde alguns minutos — o GitHub mostra "Your site is published at..."
+   quando terminar de publicar (nesse primeiro momento, ainda no endereço
+   `luiz01511.github.io/assessoriarecupere`, antes do domínio próprio
+   propagar).
+
+### 3.2 Apontar o domínio no Registro.br
+
+No **Registro.br** → **Painel → seu domínio → DNS**, cadastre os registros
+abaixo (são os IPs fixos do GitHub Pages, documentados pela própria GitHub —
+não mudam por projeto, ao contrário de outros provedores):
+
+**No domínio raiz (`assessoriarecupere.com.br`), 4 registros tipo A:**
+```
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+```
+
+**No subdomínio `www`, 1 registro tipo CNAME:**
+```
+luiz01511.github.io.
+```
+(repare no ponto final — em alguns painéis de DNS é obrigatório, em outros
+não faz diferença)
+
+Depois de cadastrar os registros, volte em **Settings → Pages** no GitHub e
+marque **Enforce HTTPS** assim que a opção aparecer disponível (pode levar
+de alguns minutos a algumas horas até o DNS propagar e o certificado SSL ser
+emitido automaticamente pelo GitHub).
 
 Essa parte do DNS no Registro.br só pode ser feita por quem tem acesso à
 conta do Registro.br do domínio — combine com quem comprou o domínio para
-fazer esse passo, ou faça você mesmo seguindo os 4 passos acima.
+fazer esse passo, ou faça você mesmo seguindo os passos acima.
