@@ -6,9 +6,11 @@ cassação, multa de bafômetro e excesso de pontos).
 
 - **Domínio:** assessoriarecupere.com.br
 - **Stack:** HTML + CSS + JS puro (sem build/framework), hospedado na Vercel.
-- **Identidade visual:** roxo (`#5B21B6`) + dourado/âmbar (`#F5A524`), sem uso
-  de verde na marca (o verde do botão de WhatsApp é intencional, é a cor
-  padrão reconhecida do app — usamos o logo oficial do WhatsApp).
+- **Identidade visual:** preto (`#141210`) + dourado (`#D4AF37`), baseada na
+  logo oficial da Recupere (fundo preto, anel dourado, símbolo da balança da
+  justiça). Sem uso de verde na marca (o verde do botão de WhatsApp é
+  intencional, é a cor padrão reconhecida do app — usamos o logo oficial do
+  WhatsApp).
 
 ## Páginas
 
