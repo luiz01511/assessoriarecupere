@@ -34,9 +34,10 @@ Enquanto a Recupere não tiver conta própria de Google Ads, deixe
 site funciona normalmente. Quando tiver uma conta:
 1. Em Google Ads → Ferramentas → Conversões, crie uma conversão e copie o ID
    (formato `AW-XXXXXXXXX/XXXXXXXXXXXXXXXXXXXX`).
-2. Em `suspensa-principal.html` e `bafometro-principal.html`, descomente o
-   bloco `<!-- Google Ads Pixel ... -->` no `<head>` e troque `AW-XXXXXXXXX`
-   pelo ID real.
+2. Em `suspensa-principal.html`, `cassada-principal.html` e
+   `bafometro-principal.html`, descomente o bloco
+   `<!-- Google Ads Pixel ... -->` no `<head>` e troque `AW-XXXXXXXXX` pelo
+   ID real.
 3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
    (a parte depois da `/`) em `js/config.js`.
 
