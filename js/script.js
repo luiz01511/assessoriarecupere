@@ -2,44 +2,8 @@
   "use strict";
 
   const cfg = window.RECUPERE_CONFIG || {};
-
-  function waLink() {
-    const msg = encodeURIComponent(cfg.whatsappMessage || "");
-    return "https://wa.me/" + (cfg.whatsappNumber || "") + (msg ? "?text=" + msg : "");
-  }
-
-  // ---- Aplica os dados de config.js em todo elemento marcado com data-field ----
-  function applyConfig() {
-    document.querySelectorAll('[data-field="phone"]').forEach((el) => {
-      el.textContent = cfg.phoneDisplay || el.textContent;
-    });
-    document.querySelectorAll('[data-field="phone-tel"]').forEach((el) => {
-      el.href = "tel:+" + (cfg.whatsappNumber || "").replace(/\D/g, "");
-    });
-    document.querySelectorAll('[data-field="email"]').forEach((el) => {
-      el.textContent = cfg.email || el.textContent;
-    });
-    document.querySelectorAll('a[href^="mailto:"]').forEach((el) => {
-      if (cfg.email) el.href = "mailto:" + cfg.email;
-    });
-    document.querySelectorAll('[data-field="address"]').forEach((el) => {
-      el.textContent = cfg.address || el.textContent;
-    });
-    document.querySelectorAll('[data-field="cnpj"]').forEach((el) => {
-      el.textContent = cfg.cnpj || el.textContent;
-    });
-    document.querySelectorAll('[data-field="instagram"]').forEach((el) => {
-      el.href = cfg.instagramUrl || el.href;
-    });
-    document.querySelectorAll('[data-field="whatsapp-link"], [data-field="whatsapp-cta"]').forEach((el) => {
-      el.href = waLink();
-      el.target = "_blank";
-      el.rel = "noopener";
-    });
-    document.querySelectorAll('[data-field="map-src"]').forEach((el) => {
-      if (cfg.mapEmbedSrc) el.src = cfg.mapEmbedSrc;
-    });
-  }
+  // applyRecupereConfig() e recupereWhatsappLink() vêm de js/config.js
+  // (compartilhadas com as landing pages em js/landing.js).
 
   // ---- Menu mobile ----
   function setupNav() {
@@ -128,7 +92,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    applyConfig();
+    applyRecupereConfig();
     setupNav();
     setupAccordion();
     setupLeadForm();

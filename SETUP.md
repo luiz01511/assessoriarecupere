@@ -8,21 +8,37 @@ domínio.
 
 ## 1. Preencher os dados reais da empresa
 
-Abra o arquivo [`js/config.js`](js/config.js) e troque os valores de exemplo:
+Abra o arquivo [`js/config.js`](js/config.js) e troque os valores que ainda
+estão como exemplo:
 
 - `phoneDisplay` — telefone formatado para exibir no site (ex: `(11) 98888-7777`)
-- `whatsappNumber` — mesmo número, só dígitos, com DDI 55 (ex: `5511988887777`)
+- `whatsappNumber` — mesmo número, só dígitos, com DDI 55 (ex: `5511988887777`).
+  **Use um número próprio da Recupere**, diferente do das outras assessorias.
 - `email` — e-mail de contato
-- `address` — endereço físico, ou deixe "Atendimento 100% online" se não houver
 - `cnpj` — CNPJ da Assessoria Recupere
 - `instagramUrl` — link do Instagram
-- `mapEmbedSrc` — se tiver endereço físico, gere o embed em
-  https://www.google.com/maps → "Compartilhar" → "Incorporar um mapa" → copie
-  o link de dentro do `src="..."` do iframe.
+
+Já preenchido (não precisa mexer, a não ser que mude):
+- `address` / `mapEmbedSrc` — endereço do escritório do grupo (Av. Salgado
+  Filho, 1056, Guarulhos/SP), o mesmo usado pela Drive Up, Doutor Regulariza
+  e CNH em Dia.
 
 Esse arquivo é o único lugar que precisa ser editado para atualizar telefone,
-e-mail, endereço e redes sociais em todo o site (topo, rodapé, botões de
-WhatsApp, formulário).
+e-mail, endereço e redes sociais em **todas as páginas do site** (institucional
+e as duas landing pages).
+
+### Pixel do Google Ads (opcional, pode deixar para depois)
+
+Enquanto a Recupere não tiver conta própria de Google Ads, deixe
+`googleAdsId` e `googleAdsConversionLabel` em branco em `js/config.js` — o
+site funciona normalmente. Quando tiver uma conta:
+1. Em Google Ads → Ferramentas → Conversões, crie uma conversão e copie o ID
+   (formato `AW-XXXXXXXXX/XXXXXXXXXXXXXXXXXXXX`).
+2. Em `suspensa-principal.html` e `bafometro-principal.html`, descomente o
+   bloco `<!-- Google Ads Pixel ... -->` no `<head>` e troque `AW-XXXXXXXXX`
+   pelo ID real.
+3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
+   (a parte depois da `/`) em `js/config.js`.
 
 ## 2. Criar a planilha de leads (Google Sheets + Apps Script)
 
@@ -32,8 +48,12 @@ conta do Google/Gmail do Luiz, já logada nesse computador):
 
 1. Acesse https://sheets.google.com e crie uma planilha nova. Renomeie para
    algo como **"Leads — Assessoria Recupere"**.
-2. Na primeira linha (linha 1), crie as colunas:
-   `Data | Nome | Telefone | Email | Como conheceu | Mensagem | Origem`
+2. Na primeira linha (linha 1), crie as colunas (nessa ordem):
+   `Data | Nome | Telefone | Email | Como conheceu | Mensagem | Página | Origem`
+
+   > A coluna **Página** identifica de qual página veio o lead: o site
+   > institucional envia em branco, e as landing pages enviam "Suspensão de
+   > CNH" ou "Multa de Bafômetro".
 3. No menu, vá em **Extensões → Apps Script**.
 4. Apague todo o conteúdo do editor e cole exatamente este código:
 
@@ -48,6 +68,7 @@ conta do Google/Gmail do Luiz, já logada nesse computador):
        e.parameter.email || '',
        e.parameter.comoConheceu || '',
        e.parameter.mensagem || '',
+       e.parameter.pagina || '',
        e.parameter.origem || ''
      ]);
      return ContentService.createTextOutput('OK');
@@ -79,8 +100,9 @@ assessorias do grupo, pronta para ser conectada depois ao sistema de gestão
 de clientes.
 
 **Se no futuro trocar o texto do formulário** (adicionar/remover um campo),
-lembre de atualizar tanto o `name="..."` do campo em `index.html` quanto a
-linha `sheet.appendRow([...])` no Apps Script, na mesma ordem.
+lembre de atualizar tanto o `name="..."` do campo (em `index.html`,
+`suspensa-principal.html` ou `bafometro-principal.html`) quanto a linha
+`sheet.appendRow([...])` no Apps Script, na mesma ordem.
 
 ## 3. Publicar o site e apontar o domínio
 
