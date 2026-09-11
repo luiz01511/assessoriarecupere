@@ -103,6 +103,13 @@ header {
     align-items: center;
     padding: 16px 20px;
 }
+.header-brand { display: flex; align-items: center; gap: 10px; }
+.header-logo-img {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
 .logo {
     font-weight: 900;
     font-size: 1.3rem;

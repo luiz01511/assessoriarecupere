@@ -128,7 +128,17 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 20px;
 }
 .logo { display: flex; align-items: center; gap: 10px; }
-.logo__mark { color: var(--gold-dark); }
+.logo__mark { color: var(--gold-dark); flex-shrink: 0; }
+.logo__mark img {
+  width: 42px; height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+.logo--seal img {
+  width: 84px; height: 84px;
+  border-radius: 10px;
+}
 .logo__text {
   font-weight: 600;
   font-size: .95rem;
