@@ -54,18 +54,18 @@ tiver uma conta:
 3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
    (a parte depois da `/`) no objeto `RECUPERE_CONFIG` — nessas 3 páginas.
 
-## 2. Conectar as landing pages à planilha de leads (Google Sheets + Apps Script)
+## 2. Conectar as 4 páginas à planilha de leads (Google Sheets + Apps Script)
 
-Isso conecta o modal de lead das 3 landing pages (`suspensa-principal`,
-`cassada-principal`, `bafometro-principal`) à planilha "LEADS ASSESSORIA
-RECUPERE" já criada pelo Luiz, no mesmo formato usado pela planilha da CNH em
-Dia Soluções: só **Data, Nome, Telefone e Página** — nada de e-mail ou
-mensagem longa, porque essas 3 páginas só perguntam nome e WhatsApp.
-
-> A página institucional (`index.html`) **não** entra nessa conexão por
-> enquanto — o formulário dela tem mais campos (e-mail, como conheceu,
-> mensagem) e vai ser redesenhado depois para decidir se mantém esse formato
-> ou simplifica igual às landing pages.
+Isso conecta **todos os pontos de contato do site** — o modal de lead das 3
+landing pages (`suspensa-principal`, `cassada-principal`,
+`bafometro-principal`), e na página institucional tanto o formulário da
+seção de contato quanto o modal que abre em qualquer botão de WhatsApp — à
+planilha "LEADS ASSESSORIA RECUPERE" já criada pelo Luiz, no mesmo formato
+usado pela planilha da CNH em Dia Soluções: só **Data, Nome, Telefone e
+Página** — todos os formulários do site pedem só nome e WhatsApp, sem
+e-mail nem mensagem longa. Isso garante que o número do lead sempre é
+gravado na planilha **antes** de abrir o WhatsApp, em qualquer botão do
+site — evita contabilizar conversão de WhatsApp sem o lead ter sido salvo.
 
 Passo a passo (com a conta do Google/Gmail do Luiz):
 
@@ -113,13 +113,13 @@ Passo a passo (com a conta do Google/Gmail do Luiz):
    a esse script).
 10. Copie a **URL do app da Web** gerada (termina com `/exec`).
 11. Cole essa URL no campo `landingPagesWebhookUrl` do `RECUPERE_CONFIG`
-    — nas **3 landing pages** (`suspensa-principal/index.html`,
+    — nas **4 páginas** (`index.html`, `suspensa-principal/index.html`,
     `cassada-principal/index.html` e `bafometro-principal/index.html`). Já
     está preenchida por padrão com a URL que o Luiz gerou; se ele criar uma
-    nova implantação e a URL mudar, atualize nas 3.
+    nova implantação e a URL mudar, atualize nas 4.
 
-Pronto — todo envio do modal de lead das 3 landing pages vai aparecer como
-uma nova linha nessa planilha.
+Pronto — todo envio de qualquer formulário ou modal do site (nas 4 páginas)
+vai aparecer como uma nova linha nessa planilha.
 
 **Se no futuro trocar o texto do formulário** (adicionar/remover um campo),
 lembre de atualizar tanto o `name="..."` do campo quanto a linha
