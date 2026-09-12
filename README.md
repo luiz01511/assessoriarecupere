@@ -15,9 +15,10 @@ cassação, multa de bafômetro e excesso de pontos).
 
 ## Páginas
 
-Cada página é uma pasta com um `index.html` dentro, para gerar URLs limpas
-(sem `.html`) no GitHub Pages — o mesmo padrão de URL usado pela CNH em Dia
-Soluções:
+Cada página é uma **pasta com um `index.html` autocontido dentro** (HTML,
+CSS e JS todos no mesmo arquivo, sem depender de arquivo externo nenhum) —
+para gerar URLs limpas (sem `.html`) no GitHub Pages e seguir o mesmo padrão
+usado pela CNH em Dia Soluções:
 
 - **`/`** (`index.html` na raiz) — site institucional (uma página só, com
   âncoras), a página do domínio "cru" (assessoriarecupere.com.br).
@@ -30,31 +31,30 @@ Soluções:
 ## Estrutura
 
 ```
-index.html                       → site institucional (URL: /)
-suspensa-principal/index.html    → landing page: CNH suspensa (URL: /suspensa-principal)
-cassada-principal/index.html     → landing page: CNH cassada (URL: /cassada-principal)
-bafometro-principal/index.html   → landing page: multa de bafômetro (URL: /bafometro-principal)
-css/style.css                    → estilos do site institucional
-css/landing.css                  → estilos compartilhados das 3 landing pages
-js/config.js                     → ÚNICO lugar com telefone, e-mail, endereço,
-                                    CNPJ, redes e o link da planilha de leads
-                                    — edite aqui (usado pelas 4 páginas)
-js/script.js                     → menu mobile, FAQ e formulário do site institucional
-js/landing.js                    → modal, máscara de telefone e envio de lead
-                                    das landing pages
-img/logo.jpg                     → logo oficial (cabeçalho, rodapé e favicon)
+index.html                       → site institucional, completo (URL: /)
+suspensa-principal/index.html    → landing page completa: CNH suspensa (URL: /suspensa-principal)
+cassada-principal/index.html     → landing page completa: CNH cassada (URL: /cassada-principal)
+bafometro-principal/index.html   → landing page completa: multa de bafômetro (URL: /bafometro-principal)
+static/logo.jpg                  → ÚNICO arquivo fora dos index.html — a logo
+                                    oficial (cabeçalho, rodapé e favicon das 4 páginas)
 CNAME                            → domínio customizado do GitHub Pages
 SETUP.md                         → passo a passo manual: dados da empresa,
                                     planilha de leads (Google Sheets) e
                                     apontamento do domínio no GitHub Pages
 ```
 
-Todo link entre páginas e todo `<link>`/`<script>`/`<img>` usa caminho
-absoluto a partir da raiz (ex: `/css/style.css`, `/img/logo.jpg`) — assim
-funciona igual em qualquer pasta, sem se preocupar com `../` ao criar novas
-páginas.
+**Não existe mais `css/` nem `js/` como pastas separadas.** Cada página tem
+seu próprio `<style>` e `<script>` inline, com uma cópia própria das
+configurações (telefone, e-mail, endereço, CNPJ, link da planilha) logo no
+topo do `<script>`, comentada como "CONFIGURAÇÕES DESTA PÁGINA — edite aqui".
+A pasta `static/` guarda **só imagens** (hoje, só a logo).
 
-O endereço já vem preenchido em `js/config.js` com o endereço do grupo
+**Trade-off importante:** como cada página é independente, atualizar um dado
+(por exemplo, o telefone) significa editar as **4 páginas**, uma por uma —
+não existe mais um arquivo de configuração único compartilhado. Isso é
+proposital, para seguir o mesmo padrão de arquivos da CNH em Dia Soluções.
+
+O endereço já vem preenchido em todas as páginas com o endereço do grupo
 (Av. Salgado Filho, 1056 — Centro, Guarulhos/SP, mesmo escritório da Drive Up,
 Doutor Regulariza e CNH em Dia). **Telefone/WhatsApp, e-mail e CNPJ da
 Recupere ainda são placeholders** — veja o `SETUP.md`.
@@ -73,18 +73,19 @@ depoimentos e números verdadeiros.
 ## Antes de publicar
 
 Siga o [`SETUP.md`](SETUP.md) — ele tem o passo a passo completo para:
-1. Preencher telefone/e-mail/CNPJ reais em `js/config.js` (endereço já está
-   preenchido).
-2. Criar a planilha de leads no Google Sheets (própria da Recupere).
+1. Preencher telefone/e-mail/CNPJ reais em cada uma das 4 páginas (endereço
+   já está preenchido).
+2. Criar a planilha de leads no Google Sheets (própria da Recupere) — já
+   conectada nas 3 landing pages.
 3. Ativar o GitHub Pages e apontar o domínio no Registro.br.
 
 ## Rodar localmente
 
-Não precisa de instalação nem servidor — é só abrir `index.html` (ou o
-`index.html` dentro de cada pasta de landing page) no navegador. Só que, como
-os caminhos são absolutos (`/css/...`), pra ver o site se comportando de
-verdade (inclusive as URLs limpas tipo `/suspensa-principal`) é melhor rodar
-um servidor estático na raiz do projeto:
+Não precisa de instalação nem build — é só abrir `index.html` (ou o
+`index.html` dentro de cada pasta de landing page) direto no navegador,
+já que cada página é autocontida. Para ver as URLs limpas (tipo
+`/suspensa-principal`) funcionando como no ar, rode um servidor estático na
+raiz do projeto:
 
 ```bash
 npx serve .

@@ -8,8 +8,19 @@ ativar o GitHub Pages e apontar o domínio.
 
 ## 1. Preencher os dados reais da empresa
 
-Abra o arquivo [`js/config.js`](js/config.js) e troque os valores que ainda
-estão como exemplo:
+Cada página é autocontida (HTML, CSS e JS no mesmo arquivo), então **não
+existe mais um `js/config.js` único** — os dados ficam duplicados no topo do
+`<script>` de cada uma das 4 páginas, num bloco comentado como
+"CONFIGURAÇÕES DESTA PÁGINA — edite aqui" (ou "CONFIGURAÇÕES DA ASSESSORIA
+RECUPERE" no `index.html`). Abra cada um destes 4 arquivos e troque os
+valores que ainda estão como exemplo:
+
+- [`index.html`](index.html)
+- [`suspensa-principal/index.html`](suspensa-principal/index.html)
+- [`cassada-principal/index.html`](cassada-principal/index.html)
+- [`bafometro-principal/index.html`](bafometro-principal/index.html)
+
+Em cada um, dentro do objeto `RECUPERE_CONFIG` no final do arquivo:
 
 - `phoneDisplay` — telefone formatado para exibir no site (ex: `(11) 98888-7777`)
 - `whatsappNumber` — mesmo número, só dígitos, com DDI 55 (ex: `5511988887777`).
@@ -18,20 +29,22 @@ estão como exemplo:
 - `cnpj` — CNPJ da Assessoria Recupere
 - `instagramUrl` — link do Instagram
 
-Já preenchido (não precisa mexer, a não ser que mude):
+Já preenchido em todas (não precisa mexer, a não ser que mude):
 - `address` / `mapEmbedSrc` — endereço do escritório do grupo (Av. Salgado
   Filho, 1056, Guarulhos/SP), o mesmo usado pela Drive Up, Doutor Regulariza
   e CNH em Dia.
 
-Esse arquivo é o único lugar que precisa ser editado para atualizar telefone,
-e-mail, endereço e redes sociais em **todas as páginas do site** (institucional
-e as duas landing pages).
+**Importante:** como não há mais um arquivo compartilhado, um dado como o
+telefone precisa ser trocado nas **4 páginas**, uma por uma — é o
+trade-off de manter cada página 100% independente, igual ao padrão de
+arquivos da CNH em Dia.
 
 ### Pixel do Google Ads (opcional, pode deixar para depois)
 
 Enquanto a Recupere não tiver conta própria de Google Ads, deixe
-`googleAdsId` e `googleAdsConversionLabel` em branco em `js/config.js` — o
-site funciona normalmente. Quando tiver uma conta:
+`googleAdsId` e `googleAdsConversionLabel` em branco (só existem nas 3
+landing pages, não no `index.html`) — o site funciona normalmente. Quando
+tiver uma conta:
 1. Em Google Ads → Ferramentas → Conversões, crie uma conversão e copie o ID
    (formato `AW-XXXXXXXXX/XXXXXXXXXXXXXXXXXXXX`).
 2. Em `suspensa-principal/index.html`, `cassada-principal/index.html` e
@@ -39,7 +52,7 @@ site funciona normalmente. Quando tiver uma conta:
    `<!-- Google Ads Pixel ... -->` no `<head>` e troque `AW-XXXXXXXXX` pelo
    ID real.
 3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
-   (a parte depois da `/`) em `js/config.js`.
+   (a parte depois da `/`) no objeto `RECUPERE_CONFIG` — nessas 3 páginas.
 
 ## 2. Conectar as landing pages à planilha de leads (Google Sheets + Apps Script)
 
@@ -99,17 +112,20 @@ Passo a passo (com a conta do Google/Gmail do Luiz):
    projeto), não seguro** (é normal para scripts pessoais, só você tem acesso
    a esse script).
 10. Copie a **URL do app da Web** gerada (termina com `/exec`).
-11. Cole essa URL no arquivo `js/config.js`, no campo
-    `landingPagesWebhookUrl` (não no `leadsSheetWebhookUrl` — esse é o da
-    página institucional, que fica intocado por enquanto).
+11. Cole essa URL no campo `landingPagesWebhookUrl` do `RECUPERE_CONFIG`
+    — nas **3 landing pages** (`suspensa-principal/index.html`,
+    `cassada-principal/index.html` e `bafometro-principal/index.html`). Já
+    está preenchida por padrão com a URL que o Luiz gerou; se ele criar uma
+    nova implantação e a URL mudar, atualize nas 3.
 
 Pronto — todo envio do modal de lead das 3 landing pages vai aparecer como
 uma nova linha nessa planilha.
 
 **Se no futuro trocar o texto do formulário** (adicionar/remover um campo),
-lembre de atualizar tanto o `name="..."` do campo (no `index.html` dentro de
-cada pasta de landing page) quanto a linha `sheet.appendRow([...])` no Apps
-Script, na mesma ordem.
+lembre de atualizar tanto o `name="..."` do campo quanto a linha
+`sheet.appendRow([...])` no Apps Script, na mesma ordem — e repetir a
+mudança de HTML nas 3 landing pages, já que cada uma tem sua própria cópia
+do formulário.
 
 ## 3. Ativar o GitHub Pages e apontar o domínio
 
