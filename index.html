@@ -210,7 +210,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   background:
     radial-gradient(1100px 480px at 82% -10%, rgba(212, 175, 55, 0.20) 0%, transparent 60%),
     linear-gradient(rgba(15, 12, 9, 0.86), rgba(12, 10, 8, 0.93)),
-    url('https://images.unsplash.com/photo-1635102639591-6084eb067f38?auto=format&fit=crop&w=1920&q=75') center/cover no-repeat;
+    url('https://images.unsplash.com/photo-1516862523118-a3724eb136d7?auto=format&fit=crop&w=1920&q=75') center/cover no-repeat;
 }
 .hero__inner {
   display: block;
@@ -729,35 +729,12 @@ ul { margin: 0; padding: 0; list-style: none; }
             <input type="text" name="nome" required placeholder="Seu nome">
           </label>
         </div>
-        <div class="lead-form__row lead-form__row--split">
+        <div class="lead-form__row">
           <label>
             WhatsApp / Telefone
             <input type="tel" name="telefone" required placeholder="(00) 00000-0000">
           </label>
-          <label>
-            E-mail
-            <input type="email" name="email" required placeholder="voce@email.com">
-          </label>
         </div>
-        <div class="lead-form__row">
-          <label>
-            Como nos conheceu?
-            <select name="comoConheceu">
-              <option value="Indicação">Indicação</option>
-              <option value="Google">Busca no Google</option>
-              <option value="Instagram">Instagram</option>
-              <option value="WhatsApp">WhatsApp</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </label>
-        </div>
-        <div class="lead-form__row">
-          <label>
-            Conte rapidamente o seu caso
-            <textarea name="mensagem" rows="4" placeholder="Ex: fui notificado de suspensão por excesso de pontos..."></textarea>
-          </label>
-        </div>
-        <input type="hidden" name="origem" value="assessoriarecupere.com.br">
 
         <button type="submit" class="btn btn--cta btn--lg lead-form__submit">
           Enviar e falar no WhatsApp
@@ -881,14 +858,10 @@ ul { margin: 0; padding: 0; list-style: none; }
     mapEmbedSrc: "https://www.google.com/maps?q=Av.+Salgado+Filho,+1056+-+Centro,+Guarulhos+-+SP&output=embed",
     cnpj: "[CNPJ]",
     instagramUrl: "https://instagram.com/assessoriarecupere",
-    // Mesma planilha/Apps Script usado pelas 3 landing pages — usado pelo
-    // modal rápido que abre em qualquer clique num botão de WhatsApp.
+    // Mesma planilha/Apps Script usado pelas 3 landing pages — usado tanto
+    // pelo formulário de nome+telefone quanto pelo modal rápido que abre em
+    // qualquer clique num botão de WhatsApp desta página.
     landingPagesWebhookUrl: "https://script.google.com/macros/s/AKfycbzLa3KpO-Dr5VXlAx-QlYZYdKLyBgSwN0gImmg2ynfN5WQpi8U2u3XAQaq4ic79EYO6/exec",
-    // Ainda não conectado de propósito: o formulário grande da seção de
-    // contato tem mais campos (e-mail, como conheceu, mensagem) que ainda
-    // vão ser decididos. Quando tiver a URL do Apps Script para essa
-    // página, cole aqui.
-    leadsSheetWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
   };
 
   function recupereWhatsappLink(customMessage) {
@@ -965,7 +938,7 @@ ul { margin: 0; padding: 0; list-style: none; }
     });
   }
 
-  // ---- Formulário de leads -> Google Sheets (Apps Script) + WhatsApp ----
+  // ---- Formulário de leads (nome + telefone) -> planilha, DEPOIS WhatsApp ----
   function setupLeadForm() {
     const form = document.getElementById("leadForm");
     const status = document.getElementById("formStatus");
@@ -973,15 +946,17 @@ ul { margin: 0; padding: 0; list-style: none; }
 
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
+      const btn = form.querySelector(".lead-form__submit");
+      if (btn) { btn.disabled = true; btn.textContent = "Enviando..."; }
+
       const data = new FormData(form);
+      data.append("pagina", "Site Institucional");
       const values = Object.fromEntries(data.entries());
 
-      const webhook = RECUPERE_CONFIG.leadsSheetWebhookUrl;
+      const webhook = RECUPERE_CONFIG.landingPagesWebhookUrl;
       const configured = webhook && !webhook.startsWith("COLE_AQUI");
 
       if (configured) {
-        status.textContent = "Enviando...";
-        status.className = "lead-form__status";
         try {
           await fetch(webhook, {
             method: "POST",
@@ -993,22 +968,15 @@ ul { margin: 0; padding: 0; list-style: none; }
         }
       }
 
-      status.textContent = configured
-        ? "Recebemos seus dados! Abrindo o WhatsApp..."
-        : "Abrindo o WhatsApp para finalizar seu contato...";
+      status.textContent = "Recebemos seus dados! Abrindo o WhatsApp...";
       status.className = "lead-form__status is-success";
 
       const resumo = encodeURIComponent(
-        `Olá! Sou ${values.nome || ""}, vim pelo site da Assessoria Recupere.\n` +
-        `Telefone: ${values.telefone || ""}\n` +
-        `Caso: ${values.mensagem || "quero uma análise gratuita"}`
+        `Olá, me chamo ${values.nome || ""} e vim pelo site da Assessoria Recupere. Quero uma análise gratuita do meu caso.`
       );
-      window.open(
-        "https://wa.me/" + RECUPERE_CONFIG.whatsappNumber + "?text=" + resumo,
-        "_blank"
-      );
-
       form.reset();
+      if (btn) { btn.disabled = false; btn.textContent = "Enviar e falar no WhatsApp"; }
+      window.location.href = "https://wa.me/" + RECUPERE_CONFIG.whatsappNumber + "?text=" + resumo;
     });
   }
 
