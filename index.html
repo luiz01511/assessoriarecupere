@@ -207,14 +207,15 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero {
   position: relative;
   overflow: hidden;
-  background: radial-gradient(1100px 480px at 82% -10%, rgba(212, 175, 55, 0.16) 0%, transparent 60%), var(--ink);
+  background:
+    radial-gradient(1100px 480px at 82% -10%, rgba(212, 175, 55, 0.20) 0%, transparent 60%),
+    linear-gradient(rgba(15, 12, 9, 0.86), rgba(12, 10, 8, 0.93)),
+    url('https://images.unsplash.com/photo-1635102639591-6084eb067f38?auto=format&fit=crop&w=1920&q=75') center/cover no-repeat;
 }
 .hero__inner {
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  align-items: center;
-  gap: 40px;
-  padding: 72px 20px 80px;
+  display: block;
+  max-width: 780px;
+  padding: 96px 20px 100px;
 }
 .pill {
   display: inline-block;
@@ -240,12 +241,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero__trust { display: flex; gap: 22px; flex-wrap: wrap; }
 .hero__trust li { display: flex; align-items: center; gap: 7px; font-size: .88rem; color: #C9C3B4; font-weight: 500; }
 .hero__trust svg { color: var(--gold); flex-shrink: 0; }
-.hero__art { display: flex; justify-content: center; }
-.hero__shield { width: 100%; max-width: 380px; }
-
 @media (max-width: 880px) {
-  .hero__inner { grid-template-columns: 1fr; padding-top: 40px; }
-  .hero__art { order: -1; max-width: 240px; margin: 0 auto; }
+  .hero__inner { padding-top: 56px; }
 }
 
 /* Strip / diferenciais */
@@ -423,6 +420,51 @@ ul { margin: 0; padding: 0; list-style: none; }
   70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
   100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
 }
+
+/* Modal de lead rápido (abre antes de qualquer clique em WhatsApp) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(10, 9, 8, 0.6);
+  display: none; align-items: center; justify-content: center;
+  z-index: 2000; backdrop-filter: blur(5px);
+  padding: 20px;
+}
+.modal.active { display: flex; }
+.modal-content {
+  background: #fff; padding: 36px; border-radius: 14px;
+  width: 100%; max-width: 440px; position: relative;
+  border: 1px solid var(--border);
+  animation: fadeInUp 0.35s ease-out;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  color: #999; cursor: pointer; font-size: 1.7rem;
+  background: none; border: none; line-height: 1;
+}
+.modal-close:hover { color: var(--ink); }
+.modal-content h2 { font-size: 1.3rem; margin-bottom: 8px; color: var(--ink); }
+.modal-content > p { color: var(--text-muted); margin-bottom: 24px; font-size: .92rem; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: .88rem; color: var(--text); }
+.form-control {
+  width: 100%; padding: 11px 14px; background: var(--bg-muted);
+  border: 1.5px solid var(--border); border-radius: 9px; color: var(--text);
+  font-size: .95rem; font-family: inherit;
+}
+.form-control:focus { outline: none; border-color: var(--gold); background: #fff; }
+.btn-submit {
+  width: 100%;
+  background: linear-gradient(135deg, var(--whatsapp), #1EBE57);
+  color: #fff; padding: 13px; border-radius: 9px; font-weight: 700;
+  border: none; cursor: pointer; font-size: .95rem;
+}
+.btn-submit:hover { transform: translateY(-1px); }
+.btn-submit:disabled { opacity: .6; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -493,7 +535,7 @@ ul { margin: 0; padding: 0; list-style: none; }
         para você. Análise inicial gratuita.
       </p>
       <div class="hero__actions">
-        <a href="#" class="btn btn--cta btn--lg" data-field="whatsapp-cta">
+        <a href="#" class="btn btn--cta btn--lg js-open-lead">
           <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
           Converse conosco agora
         </a>
@@ -504,22 +546,6 @@ ul { margin: 0; padding: 0; list-style: none; }
         <li><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg> Atendimento 100% online</li>
         <li><svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg> Análise gratuita</li>
       </ul>
-    </div>
-
-    <div class="hero__art" aria-hidden="true">
-      <svg viewBox="0 0 420 420" class="hero__shield">
-        <defs>
-          <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#E9CD6C"/>
-            <stop offset="1" stop-color="#A17F1F"/>
-          </linearGradient>
-        </defs>
-        <circle cx="210" cy="210" r="200" fill="url(#shieldGrad)" opacity="0.10"/>
-        <circle cx="210" cy="210" r="150" fill="url(#shieldGrad)" opacity="0.14"/>
-        <path d="M210 60l110 42v66c0 78-48 138-110 154-62-16-110-76-110-154V102l110-42z" fill="#141210"/>
-        <path d="M210 70l100 38v60c0 71-44 126-100 141-56-15-100-70-100-141v-60l100-38z" fill="none" stroke="url(#shieldGrad)" stroke-width="3.5" opacity="0.9"/>
-        <path d="M158 210l35 35 75-80" fill="none" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
     </div>
   </div>
 </section>
@@ -649,7 +675,7 @@ ul { margin: 0; padding: 0; list-style: none; }
         <h3>O prazo está correndo</h3>
         <p>Cada dia conta na defesa do seu caso. Quanto antes você falar com a gente, mais chances de reverter a situação.</p>
       </div>
-      <a href="#" class="btn btn--cta" data-field="whatsapp-cta">Falar agora</a>
+      <a href="#" class="btn btn--cta js-open-lead">Falar agora</a>
     </div>
   </div>
 </section>
@@ -762,7 +788,7 @@ ul { margin: 0; padding: 0; list-style: none; }
             <span data-field="hours">Segunda à Sexta: 08h às 18h</span>
           </li>
         </ul>
-        <a href="#" class="btn btn--cta btn--block" data-field="whatsapp-cta">Falar no WhatsApp</a>
+        <a href="#" class="btn btn--cta btn--block js-open-lead">Falar no WhatsApp</a>
       </div>
 
       <div class="contact__map">
@@ -819,9 +845,28 @@ ul { margin: 0; padding: 0; list-style: none; }
   </div>
 </footer>
 
-<a href="#" class="whatsapp-float" data-field="whatsapp-cta" aria-label="Falar no WhatsApp">
+<a href="#" class="whatsapp-float js-open-lead" aria-label="Falar no WhatsApp">
   <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
 </a>
+
+<div class="modal" id="leadModal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h2>Preencha as informações</h2>
+    <p>Você está a 1 passo de resolver seu problema. Nossa equipe já te chama no WhatsApp.</p>
+    <form id="quickLeadForm">
+      <div class="form-group">
+        <label for="quickNome">Seu nome e sobrenome:</label>
+        <input type="text" id="quickNome" name="nome" class="form-control" placeholder="Digite seu nome" required>
+      </div>
+      <div class="form-group">
+        <label for="quickTelefone">Seu WhatsApp (com DDD)</label>
+        <input type="tel" id="quickTelefone" name="telefone" class="form-control" placeholder="Ex.: (11) 99452-3658" inputmode="numeric" required>
+      </div>
+      <button type="submit" class="btn-submit" id="quickBtnSubmit">INICIAR ATENDIMENTO</button>
+    </form>
+  </div>
+</div>
 
 <script>
   // ============================================================
@@ -836,9 +881,13 @@ ul { margin: 0; padding: 0; list-style: none; }
     mapEmbedSrc: "https://www.google.com/maps?q=Av.+Salgado+Filho,+1056+-+Centro,+Guarulhos+-+SP&output=embed",
     cnpj: "[CNPJ]",
     instagramUrl: "https://instagram.com/assessoriarecupere",
-    // Ainda não conectado de propósito: o formulário abaixo tem mais campos
-    // (e-mail, como conheceu, mensagem) que ainda vão ser decididos. Quando
-    // tiver a URL do Apps Script para essa página, cole aqui.
+    // Mesma planilha/Apps Script usado pelas 3 landing pages — usado pelo
+    // modal rápido que abre em qualquer clique num botão de WhatsApp.
+    landingPagesWebhookUrl: "https://script.google.com/macros/s/AKfycbzLa3KpO-Dr5VXlAx-QlYZYdKLyBgSwN0gImmg2ynfN5WQpi8U2u3XAQaq4ic79EYO6/exec",
+    // Ainda não conectado de propósito: o formulário grande da seção de
+    // contato tem mais campos (e-mail, como conheceu, mensagem) que ainda
+    // vão ser decididos. Quando tiver a URL do Apps Script para essa
+    // página, cole aqui.
     leadsSheetWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
   };
 
@@ -869,7 +918,10 @@ ul { margin: 0; padding: 0; list-style: none; }
     document.querySelectorAll('[data-field="instagram"]').forEach((el) => {
       el.href = RECUPERE_CONFIG.instagramUrl || el.href;
     });
-    document.querySelectorAll('[data-field="whatsapp-link"], [data-field="whatsapp-cta"]').forEach((el) => {
+    // Só os ícones de "rede social" (topbar/rodapé) vão direto pro WhatsApp.
+    // Os botões de CTA (.js-open-lead) abrem o modal de captura primeiro —
+    // ver setupQuickLeadModal().
+    document.querySelectorAll('[data-field="whatsapp-link"]').forEach((el) => {
       el.href = recupereWhatsappLink();
       el.target = "_blank";
       el.rel = "noopener";
@@ -965,11 +1017,81 @@ ul { margin: 0; padding: 0; list-style: none; }
     if (el) el.textContent = new Date().getFullYear();
   }
 
+  // ---- Modal rápido (nome + WhatsApp) que abre em QUALQUER botão de
+  // WhatsApp da página antes de redirecionar — garante que o lead sempre
+  // cai na planilha primeiro, e só depois vai pro WhatsApp. ----
+  function setupQuickLeadModal() {
+    const modal = document.getElementById("leadModal");
+    const openBtns = document.querySelectorAll(".js-open-lead");
+    const closeBtn = document.getElementById("modalClose");
+    const form = document.getElementById("quickLeadForm");
+    if (!modal || !form) return;
+
+    function fecharModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "auto";
+    }
+
+    openBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => document.getElementById("quickNome").focus(), 100);
+      });
+    });
+
+    if (closeBtn) closeBtn.addEventListener("click", fecharModal);
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) fecharModal();
+    });
+
+    const phoneInput = document.getElementById("quickTelefone");
+    if (phoneInput) {
+      phoneInput.addEventListener("input", (e) => {
+        const x = e.target.value.replace(/\D/g, "").match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("quickBtnSubmit");
+      btn.disabled = true;
+      btn.innerText = "ENVIANDO...";
+
+      const nome = document.getElementById("quickNome").value;
+      const formData = new FormData(form);
+      formData.append("pagina", "Site Institucional");
+
+      const webhook = RECUPERE_CONFIG.landingPagesWebhookUrl;
+      const configured = webhook && !webhook.startsWith("COLE_AQUI");
+      try {
+        if (configured) {
+          await fetch(webhook, { method: "POST", mode: "no-cors", body: formData });
+        }
+      } catch (err) {
+        // no-cors não permite ler erro real de rede; seguimos para o WhatsApp mesmo assim.
+      } finally {
+        const msg = encodeURIComponent(
+          `Olá, me chamo ${nome} e vim pelo site da Assessoria Recupere. Quero uma análise gratuita do meu caso.`
+        );
+        const link = "https://wa.me/" + RECUPERE_CONFIG.whatsappNumber + "?text=" + msg;
+        fecharModal();
+        btn.disabled = false;
+        btn.innerText = "INICIAR ATENDIMENTO";
+        form.reset();
+        window.location.href = link;
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     applyRecupereConfig();
     setupNav();
     setupAccordion();
     setupLeadForm();
+    setupQuickLeadModal();
     setupYear();
   });
 </script>
