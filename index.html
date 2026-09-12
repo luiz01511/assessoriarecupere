@@ -114,10 +114,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* Topbar */
 .topbar {
+  display: none;
   background: var(--ink);
   color: #D9D2C4;
   font-size: .8rem;
 }
+@media (min-width: 768px) { .topbar { display: block; } }
 .topbar__inner {
   display: flex;
   align-items: center;
@@ -132,7 +134,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .topbar__social { display: flex; gap: 14px; }
 .topbar__social a { color: #D9D2C4; }
 .topbar__social a:hover { color: var(--gold); }
-@media (max-width: 760px) { .topbar__item--address { display: none; } }
 
 /* Header */
 .header {
