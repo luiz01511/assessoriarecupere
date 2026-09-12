@@ -1,5 +1,6 @@
 // ============================================================
-// Comportamento das landing pages (suspensa-principal, bafometro-principal)
+// Comportamento das landing pages (suspensa-principal, cassada-principal,
+// bafometro-principal)
 // Depende de js/config.js (RECUPERE_CONFIG, applyRecupereConfig).
 // Cada página define window.RECUPERE_PAGE = { pagina, mensagemWhatsapp }
 // antes de carregar este arquivo.
@@ -81,10 +82,9 @@
 
       const data = new FormData(form);
       data.append("pagina", page.pagina || "");
-      data.append("origem", "assessoriarecupere.com.br");
       const values = Object.fromEntries(data.entries());
 
-      const webhook = cfg.leadsSheetWebhookUrl;
+      const webhook = cfg.landingPagesWebhookUrl;
       const configured = webhook && !webhook.startsWith("COLE_AQUI");
       if (configured) {
         try {

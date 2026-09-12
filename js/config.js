@@ -30,7 +30,18 @@ window.RECUPERE_CONFIG = {
   // URL do Google Apps Script (Web App) que grava os leads na planilha.
   // IMPORTANTE: crie uma planilha e um Apps Script PRÓPRIOS da Recupere —
   // não reaproveite a URL/credencial Google de nenhuma outra assessoria.
+  //
+  // Duas URLs separadas de propósito, pra poder ligar uma sem mexer na outra:
+  //
+  // - landingPagesWebhookUrl: usada pelas 3 landing pages (suspensa, cassada,
+  //   bafometro). Cada envio manda só nome, telefone e página (o mesmo
+  //   padrão simples usado pelas outras assessorias do grupo).
+  // - leadsSheetWebhookUrl: usada pelo formulário da página institucional
+  //   (index.html), que ainda vai ser redesenhado — deixe como está
+  //   ("COLE_AQUI...") até decidirem o formato final dele.
+  //
   // Passo a passo completo em SETUP.md.
+  landingPagesWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
   leadsSheetWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
 
   // ID de conversão do Google Ads (Google Ads → Ferramentas → Conversões).

@@ -41,44 +41,48 @@ site funciona normalmente. Quando tiver uma conta:
 3. Preencha `googleAdsId` (a parte antes da `/`) e `googleAdsConversionLabel`
    (a parte depois da `/`) em `js/config.js`.
 
-## 2. Criar a planilha de leads (Google Sheets + Apps Script)
+## 2. Conectar as landing pages à planilha de leads (Google Sheets + Apps Script)
 
-Isso conecta o formulário do site a uma planilha Google, no mesmo padrão que
-já é usado pela Drive Up e pela Dr. Regulariza. Passo a passo (fazer com a
-conta do Google/Gmail do Luiz, já logada nesse computador):
+Isso conecta o modal de lead das 3 landing pages (`suspensa-principal`,
+`cassada-principal`, `bafometro-principal`) à planilha "LEADS ASSESSORIA
+RECUPERE" já criada pelo Luiz, no mesmo formato usado pela planilha da CNH em
+Dia Soluções: só **Data, Nome, Telefone e Página** — nada de e-mail ou
+mensagem longa, porque essas 3 páginas só perguntam nome e WhatsApp.
 
-1. Acesse https://sheets.google.com e crie uma planilha nova. Renomeie para
-   algo como **"Leads — Assessoria Recupere"**.
-2. Na primeira linha (linha 1), crie as colunas (nessa ordem):
-   `Data | Nome | Telefone | Email | Como conheceu | Mensagem | Página | Origem`
+> A página institucional (`index.html`) **não** entra nessa conexão por
+> enquanto — o formulário dela tem mais campos (e-mail, como conheceu,
+> mensagem) e vai ser redesenhado depois para decidir se mantém esse formato
+> ou simplifica igual às landing pages.
 
-   > A coluna **Página** identifica de qual página veio o lead: o site
-   > institucional envia em branco, e as landing pages enviam "Suspensão de
-   > CNH" ou "Multa de Bafômetro".
+Passo a passo (com a conta do Google/Gmail do Luiz):
+
+1. Abra a planilha "LEADS ASSESSORIA RECUPERE" que o Luiz já criou.
+2. Confirme que a linha 1 tem as colunas, nessa ordem:
+   `Data | Nome | Telefone | Origem`
+
+   (a coluna **Origem** aqui guarda o nome da página, ex. "Suspensão de CNH"
+   — mesmo padrão da planilha da CNH em Dia)
 3. No menu, vá em **Extensões → Apps Script**.
 4. Apague todo o conteúdo do editor e cole exatamente este código:
 
    ```javascript
    function doPost(e) {
-     var ss = SpreadsheetApp.getActiveSpreadsheet();
-     var sheet = ss.getSheetByName('Página1') || ss.getActiveSheet();
-     sheet.appendRow([
-       new Date(),
-       e.parameter.nome || '',
-       e.parameter.telefone || '',
-       e.parameter.email || '',
-       e.parameter.comoConheceu || '',
-       e.parameter.mensagem || '',
-       e.parameter.pagina || '',
-       e.parameter.origem || ''
-     ]);
-     return ContentService.createTextOutput('OK');
+     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+     var data = new Date();
+     var nome = e.parameter.nome || "Não informado";
+     var telefone = e.parameter.telefone || "Não informado";
+     var pagina = e.parameter.pagina || "Não informada";
+
+     sheet.appendRow([data, nome, telefone, pagina]);
+
+     return ContentService.createTextOutput(JSON.stringify({"status": "sucesso"}))
+       .setMimeType(ContentService.MimeType.JSON);
    }
    ```
 
-   > Se o nome da aba da sua planilha não for "Página1" (por exemplo, se for
-   > "Sheet1"), troque o texto entre aspas na linha `getSheetByName(...)`
-   > para o nome real da aba.
+   (é o mesmo código usado na planilha da CNH em Dia — grava na aba que
+   estiver ativa na hora, sem precisar acertar o nome da aba)
 
 5. Clique em **Salvar** (ícone de disquete) e dê um nome ao projeto, ex:
    "Recupere Leads".
@@ -93,17 +97,17 @@ conta do Google/Gmail do Luiz, já logada nesse computador):
    projeto), não seguro** (é normal para scripts pessoais, só você tem acesso
    a esse script).
 10. Copie a **URL do app da Web** gerada (termina com `/exec`).
-11. Cole essa URL no arquivo `js/config.js`, no campo `leadsSheetWebhookUrl`.
+11. Cole essa URL no arquivo `js/config.js`, no campo
+    `landingPagesWebhookUrl` (não no `leadsSheetWebhookUrl` — esse é o da
+    página institucional, que fica intocado por enquanto).
 
-Pronto — todo envio do formulário do site vai aparecer como uma nova linha
-nessa planilha, no mesmo formato que a planilha de leads das outras
-assessorias do grupo, pronta para ser conectada depois ao sistema de gestão
-de clientes.
+Pronto — todo envio do modal de lead das 3 landing pages vai aparecer como
+uma nova linha nessa planilha.
 
 **Se no futuro trocar o texto do formulário** (adicionar/remover um campo),
-lembre de atualizar tanto o `name="..."` do campo (em `index.html` ou no
-`index.html` dentro de uma das pastas de landing page) quanto a linha
-`sheet.appendRow([...])` no Apps Script, na mesma ordem.
+lembre de atualizar tanto o `name="..."` do campo (no `index.html` dentro de
+cada pasta de landing page) quanto a linha `sheet.appendRow([...])` no Apps
+Script, na mesma ordem.
 
 ## 3. Ativar o GitHub Pages e apontar o domínio
 
