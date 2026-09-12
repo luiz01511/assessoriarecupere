@@ -60,8 +60,10 @@ Passo a passo (com a conta do Google/Gmail do Luiz):
 2. Confirme que a linha 1 tem as colunas, nessa ordem:
    `Data | Nome | Telefone | Origem`
 
-   (a coluna **Origem** aqui guarda o nome da página, ex. "Suspensão de CNH"
-   — mesmo padrão da planilha da CNH em Dia)
+   (a coluna **Origem** aqui guarda o nome da página: "CNH Suspensa",
+   "CNH Cassada" ou "Lei Seca / Bafômetro" — mesmo padrão da planilha da
+   CNH em Dia. Todas as 3 landing pages gravam na mesma planilha; é essa
+   coluna que diferencia de onde veio cada lead.)
 3. No menu, vá em **Extensões → Apps Script**.
 4. Apague todo o conteúdo do editor e cole exatamente este código:
 
