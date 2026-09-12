@@ -41,7 +41,7 @@ window.RECUPERE_CONFIG = {
   //   ("COLE_AQUI...") até decidirem o formato final dele.
   //
   // Passo a passo completo em SETUP.md.
-  landingPagesWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
+  landingPagesWebhookUrl: "https://script.google.com/macros/s/AKfycbzLa3KpO-Dr5VXlAx-QlYZYdKLyBgSwN0gImmg2ynfN5WQpi8U2u3XAQaq4ic79EYO6/exec",
   leadsSheetWebhookUrl: "COLE_AQUI_A_URL_DO_APPS_SCRIPT",
 
   // ID de conversão do Google Ads (Google Ads → Ferramentas → Conversões).
