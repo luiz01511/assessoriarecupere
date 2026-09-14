@@ -951,7 +951,7 @@ ul { margin: 0; padding: 0; list-style: none; }
       if (btn) { btn.disabled = true; btn.textContent = "Enviando..."; }
 
       const data = new FormData(form);
-      data.append("pagina", "Site Institucional");
+      data.append("pagina", "Site Principal");
       const values = Object.fromEntries(data.entries());
 
       const webhook = RECUPERE_CONFIG.landingPagesWebhookUrl;
@@ -973,7 +973,7 @@ ul { margin: 0; padding: 0; list-style: none; }
       status.className = "lead-form__status is-success";
 
       const resumo = encodeURIComponent(
-        `Olá, me chamo ${values.nome || ""} e vim pelo site da Assessoria Recupere. Quero uma análise gratuita do meu caso.`
+        `Olá, me chamo ${values.nome || ""} e vim pelo site da Assessoria Recupere. Quero uma análise do meu caso.`
       );
       form.reset();
       if (btn) { btn.disabled = false; btn.textContent = "Enviar e falar no WhatsApp"; }
@@ -1031,7 +1031,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
       const nome = document.getElementById("quickNome").value;
       const formData = new FormData(form);
-      formData.append("pagina", "Site Institucional");
+      formData.append("pagina", "Site Principal");
 
       const webhook = RECUPERE_CONFIG.landingPagesWebhookUrl;
       const configured = webhook && !webhook.startsWith("COLE_AQUI");
