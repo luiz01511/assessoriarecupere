@@ -899,10 +899,16 @@
                 btn.innerText = "ENVIANDO...";
 
                 const nome = document.getElementById('nome').value;
+                const telefoneDigits = document.getElementById('telefone').value.replace(/\D/g, '');
+                const telefoneE164 = telefoneDigits ? '+55' + telefoneDigits : '';
                 const formData = new FormData(form);
                 formData.append('pagina', RECUPERE_PAGE.pagina);
 
                 try {
+                    if (window.gtag && telefoneE164) {
+                        // Conversões otimizadas: envia o telefone do lead (in-page) além da tag automática.
+                        gtag('set', 'user_data', { 'phone_number': telefoneE164 });
+                    }
                     if (window.gtag && RECUPERE_CONFIG.googleAdsId && RECUPERE_CONFIG.googleAdsConversionLabel) {
                         gtag('event', 'conversion', {
                             'send_to': RECUPERE_CONFIG.googleAdsId + '/' + RECUPERE_CONFIG.googleAdsConversionLabel
